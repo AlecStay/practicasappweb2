@@ -1,0 +1,42 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Equipo {
+  idequipo      Int     @id @default(autoincrement())
+  Descripcion   String
+  Serie         String
+  Estado        String  @default("Activo")
+  partidos      Partido[]
+}
+
+model Torneo {
+  idtorneo      Int     @id @default(autoincrement())
+  Descripcion   String
+  Estado        String  @default("Activo")
+  partidos      Partido[]
+}
+
+model Partido {
+  idpartido      Int     @id @default(autoincrement())
+  torneo         Torneo  @relation(fields: [torneoId], references: [idtorneo])
+  torneoId       Int
+  equipo1        Equipo  @relation(fields: [equipo1Id], references: [idequipo])
+  equipo1Id      Int
+  equipo2Id      Int
+  golesEquipo1   Int
+  golesEquipo2   Int
+  observacion    String
+  Estado         String  @default("Activo")
+}
